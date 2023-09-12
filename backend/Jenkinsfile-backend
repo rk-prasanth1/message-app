@@ -4,7 +4,7 @@ pipeline{
     stages {
         stage('build image') {
             steps {
-                sh 'sudo docker network rm --force chatnetwork'
+                sh 'sudo docker network rm chatnetwork'
                 sh 'sudo docker rmi -f prasanth/backend'
                 sh 'sudo docker network create -d bridge chatnetwork'
                 sh 'cd backend && sudo docker build -t prasanthrk/backend .'
