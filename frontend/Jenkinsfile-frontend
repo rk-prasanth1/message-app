@@ -10,8 +10,8 @@ pipeline{
         }
         stage('app deploy') {
             steps {
-                sh 'sudo docker container rm --force backend'
-                sh 'sudo docker run -dt --name backend -p 80:80 prasanthrk/frontend'
+                sh 'sudo docker container rm --force frontend'
+                sh 'sudo docker run -dt --name frontend -p 80:80 prasanthrk/frontend'
          }
       }
    }
