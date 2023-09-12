@@ -1,0 +1,18 @@
+pipeline{
+    agent any
+
+    stages {
+        stage('build image') {
+            steps {
+                sh 'sudo docker rmi -f prasanth/frontend'
+                sh 'cd frontend && sudo docker build -t prasanthrk/frontend .'
+            }
+        }
+        stage('app deploy') {
+            steps {
+                sh 'sudo docker container rm --force backend'
+                sh 'sudo docker run -dt --name backend -p 80:80 prasanthrk/frontend'
+        }
+    }
+}
+
