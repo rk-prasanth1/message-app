@@ -12,7 +12,7 @@ pipeline{
             steps {
                 sh 'sudo docker container rm --force backend'
                 sh 'sudo docker run -dt --name backend -p 80:80 prasanthrk/frontend'
-        }
-    }
+         }
+      }
+   }
 }
-
