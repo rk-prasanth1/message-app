@@ -4,8 +4,8 @@ pipeline{
     stages {
         stage('sonar analysis') {
             steps {
-                sh 'cd frontend && sudo docker run --rm -e SONAR_HOST_URL="http://13.234.116.42:9000" -e SONAR_TOKEN=sqp_dfab7ccebe801dcbb6480f4181e42b326b16dbcc -v ".:/usr/src" sonarsource/sonar-scanner-cli "-Dsonar.projectKey=chat-frontend"'
-             }   
+               sh 'cd backend && sudo docker run --rm -e SONAR_HOST_URL="http://43.205.211.57:9000" -e SONAR_TOKEN=sqp_014df1a65b91656b718654a7dfc3ce3fbeaff6ca -v ".:/usr/src" sonarsource/sonar-scanner-cli "-Dsonar.projectKey=message"'  
+      }   
         }
 
         stage('build image') {
