@@ -2,6 +2,12 @@ pipeline{
     agent any
 
     stages {
+        stage('sonar analysis') {
+            steps {
+                sh 'cd backend && sudo docker run --rm -e SONAR_HOST_URL="http://3.109.153.59:9000" -e SONAR_TOKEN=sqp_a02818083069e6bc31c83c2ff4df01a36c7a9fbd -v ".:/usr/src" sonarsource/sonar-scanner-cli "-Dsonar.projectKey=message"'
+             }   
+        }
+
         stage('build image') {
             steps {
                 sh 'sudo docker rmi -f prasanth/backend'
