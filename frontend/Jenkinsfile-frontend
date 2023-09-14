@@ -68,4 +68,36 @@ pipeline{
          }
       }
    }
+post {
+success {
+    script {
+        slackSend(
+            channel: 'chatapp',
+            color: 'good',
+            message: 'hi..CONGRATULATIONS frontend job success !!! frontend build succeeded Thanks...prasanth',
+            tokenCredentialId: 'jenkin-project'
+        )
+
+        emailext body: 'building chat application frontend job got success check browser with your ip. Thankyou prasanth',
+            recipientProviders: [developers()],
+            subject: 'build successed',
+            to: 'prasanth.rk66@gmail.com'
+    }
+}
+    failure {
+        script {
+            slackSend(
+                channel: 'chatapp',
+                color: 'danger',
+                message: 'frontend job got failed. Please check the build logs for more details. Thanks...prasanth',
+                tokenCredentialId: 'jenkin-project'
+
+            )
+            emailext body: 'building chat application frontend job got failed check the job.',
+            recipientProviders: [developers()],
+            subject: 'build failed',
+            to: 'prasanth.rk55@gmail.com'
+        }
+    }
+}
 }
