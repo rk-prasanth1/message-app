@@ -1,7 +1,22 @@
 pipeline{
-    agent any
+    agent {
+      label 'chat-app'
+    }
+
+    environment {
+    DOCKERHUB_CREDENTIALS = credentials('dockerid')
+     registry = "prasanthrk/frontend"
+        registryCredential = 'dockerid'
+        dockerImage = ''
+    }
 
     stages {
+        stage('slack notification') {
+            steps {
+                slackSend channel: 'project', color: 'ffff00', message: "SlackSend 'backend pipeline has been started ${env.JOB_NAME} ${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)'"
+            }
+        }
+
         stage('sonar analysis') {
             steps {
                sh 'cd frontend && sudo docker run --rm -e SONAR_HOST_URL="http://43.205.211.57:9000" -e SONAR_TOKEN=sqp_014df1a65b91656b718654a7dfc3ce3fbeaff6ca -v ".:/usr/src" sonarsource/sonar-scanner-cli "-Dsonar.projectKey=message"'
@@ -14,6 +29,38 @@ pipeline{
                 sh 'cd frontend && sudo docker build -t prasanthrk/frontend .'
             }
         }
+
+        stage('Nexus-Release chat') {
+            steps {
+                script {
+                    echo "Releasing.."       
+                    def packageJSON = readJSON file: 'frontend/package.json'
+                    def packageJSONVersion = packageJSON.version
+                    echo "${packageJSONVersion}"  
+                    sh "zip frontend-${packageJSONVersion}.zip -r frontend"
+                    sh "curl -v -u admin:admin1 --upload-file webapp-${packageJSONVersion}.zip http://43.207.234.67:8081/repository/chat-application/"     
+            }
+            }
+        }
+
+        stage('docker-login') {
+            steps {
+                sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
+            }
+        }
+
+        stage('pushing image to dockerhub') {
+            steps {
+                  sh 'docker push prasanthrk/frontend'
+            }
+        }
+
+        stage('Remove old images') {
+             steps {
+                 sh 'docker rmi -f prasanthrk/frontend'
+            }
+        }
+
         stage('app deploy') {
             steps {
                 sh 'sudo docker container rm --force frontend'
