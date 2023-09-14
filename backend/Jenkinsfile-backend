@@ -1,7 +1,20 @@
 pipeline{
-    agent any
-
+    agent {
+      label 'chat-app'  
+    }
+    environment {
+    DOCKERHUB_CREDENTIALS = credentials('dockerid')
+     registry = "prasanthrk/backend"
+        registryCredential = 'dockerid'
+        dockerImage = ''
+    }
     stages {
+        stage('slack notification') {
+            steps {
+                slackSend channel: 'project', color: 'ffff00', message: "SlackSend 'backend pipeline has been started ${env.JOB_NAME} ${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)'"
+            }
+        }
+
         stage('sonar analysis') {
             steps {
                 sh 'cd backend && sudo docker run --rm -e SONAR_HOST_URL="http://43.205.211.57:9000" -e SONAR_TOKEN=sqp_014df1a65b91656b718654a7dfc3ce3fbeaff6ca -v ".:/usr/src" sonarsource/sonar-scanner-cli "-Dsonar.projectKey=message"'
@@ -15,12 +28,44 @@ pipeline{
                 sh 'cd backend && sudo docker build -t prasanthrk/backend .'
             }
         }
+
+        stage('Nexus-Release chat') {
+            steps {
+                script {
+                    echo "Releasing.."       
+                    def packageJSON = readJSON file: 'backend/package.json'
+                    def packageJSONVersion = packageJSON.version
+                    echo "${packageJSONVersion}"  
+                    sh "zip backend-${packageJSONVersion}.zip -r backend"
+                    sh "curl -v -u admin:admin1 --upload-file webapp-${packageJSONVersion}.zip http://43.207.234.67:8081/repository/lmsapplication/"     
+            }
+            }
+        }
+
+        stage('docker-login') {
+            steps {
+                sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
+            }
+        }
+
+        stage('pushing image to dockerhub') {
+            steps {
+                  sh 'docker push prasanthrk/backend'
+            }
+        }
+
+        stage('Remove old images') {
+             steps {
+                 sh 'docker rmi -f prasanthrk/backend'
+            }
+        }
+
         stage('app deploy') {
             steps {
                 sh 'sudo docker container rm --force chatdb'
                 sh 'sudo docker container rm --force backend'
                 sh 'sudo docker run -d --name chatdb -p 5432:5432 --network chatnetwork1 -e POSTGRES_PASSWORD=password postgres'
-                sh 'sudo docker container run -dt --name backend -p 8082:8082 --network chatnetwork1 -e DATABASE_URL=postgresql://postgres:password@chatdb:5432/postgres -e PORT=8082 -e NODE_ENV=development -e JWT_SECRET=Odurxn3pec8mwtgwI/QJIt3hsttGpQjC3Tc3wz1K6N4= -e SENDGRID_API_KEY=sendgridapikey -e SENDGRID_FROM_EMAIL=prasanth.rk22@gmail.com prasanthrk/backend'
+                sh 'sudo docker container run -dt --name backend -p 8080:8080 --network chatnetwork1 -e DATABASE_URL=postgresql://postgres:password@chatdb:5432/postgres -e PORT=8080 -e NODE_ENV=development -e JWT_SECRET=Odurxn3pec8mwtgwI/QJIt3hsttGpQjC3Tc3wz1K6N4= -e SENDGRID_API_KEY=sendgridapikey -e SENDGRID_FROM_EMAIL=prasanth.rk22@gmail.com prasanthrk/backend'
             }
         }
     }
