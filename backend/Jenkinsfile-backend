@@ -11,7 +11,7 @@ pipeline{
     stages {
         stage('slack notification') {
             steps {
-                slackSend channel: 'project', color: 'ffff00', message: "SlackSend 'backend pipeline has been started ${env.JOB_NAME} ${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)'"
+                slackSend channel: 'chatapp', color: 'ffff00', message: "SlackSend 'backend pipeline has been started ${env.JOB_NAME} ${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)'"
             }
         }
 
@@ -69,4 +69,36 @@ pipeline{
             }
         }
     }
+post {
+success {
+    script {
+        slackSend(
+            channel: 'chatapp',
+            color: 'good',
+            message: 'hi..CONGRATULATIONS backend job success !!! backend build succeeded Thanks...prasanth',
+            tokenCredentialId: 'jenkin-project'
+        )
+
+        emailext body: 'building chat application backend job got success check browser with your ip. Thankyou prasanth',
+            recipientProviders: [developers()],
+            subject: 'build successed',
+            to: 'prasanth.rk66@gmail.com'
+    }
+}
+    failure {
+        script {
+            slackSend(
+                channel: 'chatapp',
+                color: 'danger',
+                message: 'backend job failed. Please check the build logs for more details. Thanks...prasanth',
+                tokenCredentialId: 'jenkin-project'
+
+            )
+            emailext body: 'building chat application backend job got failed check the job.',
+            recipientProviders: [developers()],
+            subject: 'build failed',
+            to: 'prasanth.rk55@gmail.com'
+        }
+    }
+}
 }
