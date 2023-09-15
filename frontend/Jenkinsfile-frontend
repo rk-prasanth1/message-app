@@ -13,7 +13,7 @@ pipeline{
     stages {
         stage('slack notification') {
             steps {
-                slackSend channel: 'project', color: 'ffff00', message: "SlackSend 'backend pipeline has been started ${env.JOB_NAME} ${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)'"
+                slackSend channel: 'chatapp', color: 'ffff00', message: "SlackSend 'Frontend pipeline has been started ${env.JOB_NAME} ${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)'"
             }
         }
 
@@ -74,11 +74,11 @@ success {
         slackSend(
             channel: 'chatapp',
             color: 'good',
-            message: 'hi..CONGRATULATIONS frontend job success !!! frontend build succeeded Thanks...prasanth',
+            message: 'hi..CONGRATULATIONS frontend job is success !!! frontend build got succeeded Thanks...prasanth',
             tokenCredentialId: 'jenkin-project'
         )
 
-        emailext body: 'building chat application frontend job got success check browser with your ip. Thankyou prasanth',
+        emailext body: 'Frontend chat application job got succeed.$PROJECT_NAME - Build # $BUILD_NUMBER - $BUILD_STATUS Check console output at $BUILD_URL to view the results.. Thankyou prasanth',
             recipientProviders: [developers()],
             subject: 'build successed',
             to: 'prasanth.rk66@gmail.com'
@@ -93,10 +93,10 @@ success {
                 tokenCredentialId: 'jenkin-project'
 
             )
-            emailext body: 'building chat application frontend job got failed check the job.',
+            emailext body: 'Frontend chat application job got Failed.$PROJECT_NAME - Build # $BUILD_NUMBER - $BUILD_STATUS Check console output at $BUILD_URL to view the results.. Thankyou prasanth',
             recipientProviders: [developers()],
             subject: 'build failed',
-            to: 'prasanth.rk55@gmail.com'
+            to: 'prasanth.rk66@gmail.com'
         }
     }
 }
