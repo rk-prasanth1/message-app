@@ -24,7 +24,7 @@ pipeline{
         stage('build image') {
             steps {
                 sh 'sudo docker rmi -f prasanth/backend'
-                sh 'sudo docker network create -d bridge chatnetwork1'
+                sh 'sudo docker network create -d bridge chatnetwork'
                 sh 'cd backend && sudo docker build -t prasanthrk/backend .'
             }
         }
@@ -64,8 +64,8 @@ pipeline{
             steps {
                 sh 'sudo docker container rm --force chatdb'
                 sh 'sudo docker container rm --force backend'
-                sh 'sudo docker run -d --name chatdb -p 5432:5432 --network chatnetwork1 -e POSTGRES_PASSWORD=password postgres'
-                sh 'sudo docker container run -dt --name backend -p 8080:8080 --network chatnetwork1 -e DATABASE_URL=postgresql://postgres:password@chatdb:5432/postgres -e PORT=8080 -e NODE_ENV=development -e JWT_SECRET=Odurxn3pec8mwtgwI/QJIt3hsttGpQjC3Tc3wz1K6N4= -e SENDGRID_API_KEY=sendgridapikey -e SENDGRID_FROM_EMAIL=prasanth.rk22@gmail.com prasanthrk/backend'
+                sh 'sudo docker run -d --name chatdb -p 5432:5432 --network chatnetwork -e POSTGRES_PASSWORD=password postgres'
+                sh 'sudo docker container run -dt --name backend -p 8080:8080 --network chatnetwork -e DATABASE_URL=postgresql://postgres:password@chatdb:5432/postgres -e PORT=8080 -e NODE_ENV=development -e JWT_SECRET=Odurxn3pec8mwtgwI/QJIt3hsttGpQjC3Tc3wz1K6N4= -e SENDGRID_API_KEY=sendgridapikey -e SENDGRID_FROM_EMAIL=prasanth.rk22@gmail.com prasanthrk/backend'
             }
         }
     }
@@ -75,11 +75,11 @@ success {
         slackSend(
             channel: 'chatapp',
             color: 'good',
-            message: 'hi..CONGRATULATIONS backend job success !!! backend build succeeded Thanks...prasanth',
+            message: 'hi..CONGRATULATIONS backend job is success !!! backend build succeeded Thanks...prasanth',
             tokenCredentialId: 'jenkin-project'
         )
 
-        emailext body: 'building chat application backend job got success check browser with your ip. Thankyou prasanth',
+        emailext body: 'Backend chat application job got succeed.$PROJECT_NAME - Build # $BUILD_NUMBER - $BUILD_STATUS Check console output at $BUILD_URL to view the results.. Thankyou prasanth',
             recipientProviders: [developers()],
             subject: 'build successed',
             to: 'prasanth.rk66@gmail.com'
@@ -94,10 +94,10 @@ success {
                 tokenCredentialId: 'jenkin-project'
 
             )
-            emailext body: 'building chat application backend job got failed check the job.',
+            emailext body: 'backend chat application job got failed.$PROJECT_NAME - Build # $BUILD_NUMBER - $BUILD_STATUS Check console output at $BUILD_URL to view the results.. Thankyou prasanth',.',
             recipientProviders: [developers()],
-            subject: 'build failed',
-            to: 'prasanth.rk55@gmail.com'
+            subject: 'build got failed',
+            to: 'prasanth.rk66@gmail.com'
         }
     }
 }
