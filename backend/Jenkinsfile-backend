@@ -81,7 +81,7 @@ success {
 
         emailext body: 'Backend chat application job got succeed.$PROJECT_NAME - Build # $BUILD_NUMBER - $BUILD_STATUS Check console output at $BUILD_URL to view the results.. Thankyou prasanth',
             recipientProviders: [developers()],
-            subject: 'build successed',
+            subject: 'chat app build got successed',
             to: 'prasanth.rk66@gmail.com'
     }
 }
@@ -96,7 +96,7 @@ success {
             )
             emailext body: 'backend chat application job got failed.$PROJECT_NAME - Build # $BUILD_NUMBER - $BUILD_STATUS Check console output at $BUILD_URL to view the results.. Thankyou prasanth',.',
             recipientProviders: [developers()],
-            subject: 'build got failed',
+            subject: 'chat app build got failed',
             to: 'prasanth.rk66@gmail.com'
         }
     }
