@@ -61,7 +61,7 @@ pipeline{
 
         stage('app deploy') {
             steps {
-                sh 'sudo docker container rm --force chatnetwork'
+                sh 'sudo docker network rm --force chatnetwork'
                 sh 'sudo docker container rm --force chatdb'
                 sh 'sudo docker network create -d bridge chatnetwork'
                 sh 'sudo docker container rm --force backend'
