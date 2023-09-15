@@ -94,7 +94,7 @@ success {
                 tokenCredentialId: 'jenkin-project'
 
             )
-            emailext body: 'backend chat application job got failed.$PROJECT_NAME - Build # $BUILD_NUMBER - $BUILD_STATUS Check console output at $BUILD_URL to view the results.. Thankyou prasanth',.',
+            emailext body: 'backend chat application job got failed.$PROJECT_NAME - Build # $BUILD_NUMBER - $BUILD_STATUS Check console output at $BUILD_URL to view the results.. Thankyou prasanth',
             recipientProviders: [developers()],
             subject: 'chat app build got failed',
             to: 'prasanth.rk66@gmail.com'
