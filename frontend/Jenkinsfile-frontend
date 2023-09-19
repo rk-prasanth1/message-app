@@ -19,7 +19,7 @@ pipeline{
 
         stage('sonar analysis') {
             steps {
-               sh 'cd frontend && sudo docker run --rm -e SONAR_HOST_URL="http://3.110.180.159:9000" -e SONAR_TOKEN=sqp_10ab970fa26192f9230d93ab83e14190e60de025 -v ".:/usr/src" sonarsource/sonar-scanner-cli "-Dsonar.projectKey=chat-app"'
+               sh 'cd frontend && sudo docker run --rm -e SONAR_HOST_URL="http://15.207.247.104:9000" -e SONAR_TOKEN=sqp_58809e7f1a0bd33395bcafe74e93057aed2673e1 -v ".:/usr/src" sonarsource/sonar-scanner-cli "-Dsonar.projectKey=chat-app"'
              }   
         }
 
@@ -35,10 +35,10 @@ pipeline{
                 script {
                     echo "Releasing.."       
                     def packageJSON = readJSON file: 'frontend/package.json'
-                    def packageJSONVersion = packageJSON.version
+                    def packageJSONVersion = 0.0.0
                     echo "${packageJSONVersion}"  
-                    sh "zip -r frontend/src-${packageJSONVersion}.zip -i frontend/src"
-                    sh "curl -v -u admin:rk@098rk --upload-file frontend/src-${packageJSONVersion}.zip http://3.110.180.159:8081/repository/chat-application/"     
+                    sh "zip -r frontend/src-0.0.0.zip. -i frontend/src"
+                    sh "curl -v -u admin:rk@098rk --upload-file frontend/src-${packageJSONVersion}.zip http://15.207.247.104:8081/repository/chat-application/"     
             }
             }
         }
