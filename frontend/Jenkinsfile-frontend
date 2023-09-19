@@ -26,11 +26,11 @@ pipeline{
         stage('build image') {
             steps {
                 sh 'sudo docker rmi -f prasanth/frontend'
-                sh 'cd frontend && sudo docker build -t prasanthrk/frontend .'
+                sh 'cd frontend && sudo docker build -t prasanthrk/frontend:1.0.0 .'
             }
         }
 
-        stage('Nexus-Release chat') {
+        stage('docker image ') {
             steps {
                 script {
                     echo "Releasing.."       
