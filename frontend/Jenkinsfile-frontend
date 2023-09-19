@@ -35,9 +35,9 @@ pipeline{
                 script {
                     echo "Releasing.."       
                     def packageJSON = readJSON file: 'frontend/package.json'
-                    def packageJSONVersion = '0.0.0'
+                    def packageJSONVersion = '1.0.0'
                     echo "${packageJSONVersion}"  
-                    sh "zip -r frontend/src-0.0.0.zip frontend/src"
+                    sh "zip -r frontend/src-1.0.0.zip frontend/src"
                     sh "curl -v -u admin:rk@098rk --upload-file frontend/src-${packageJSONVersion}.zip http://15.207.247.104:8081/repository/chat-application/"     
             }
             }
