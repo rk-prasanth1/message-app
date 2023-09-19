@@ -13,7 +13,7 @@ pipeline{
     stages {
         stage('slack notification') {
             steps {
-                slackSend channel: 'chatapp', color: 'ffff00', message: "SlackSend 'Frontend pipeline has been started ${env.JOB_NAME} ${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)'"
+                slackSend channel: 'chatapplication', color: 'ffff00', message: "SlackSend 'Frontend pipeline has been started ${env.JOB_NAME} ${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)'"
             }
         }
 
@@ -72,7 +72,7 @@ post {
 success {
     script {
         slackSend(
-            channel: 'chatapp',
+            channel: 'chatapplication',
             color: 'good',
             message: 'hi..CONGRATULATIONS frontend job is success !!! frontend build got succeeded Thanks...prasanth',
             tokenCredentialId: 'jenkin-project'
@@ -87,7 +87,7 @@ success {
     failure {
         script {
             slackSend(
-                channel: 'chatapp',
+                channel: 'chatapplication',
                 color: 'danger',
                 message: 'frontend job got failed. Please check the build logs for more details. Thanks...prasanth',
                 tokenCredentialId: 'jenkin-project'
