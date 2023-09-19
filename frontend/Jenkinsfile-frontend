@@ -5,7 +5,7 @@ pipeline{
 
     environment {
     DOCKERHUB_CREDENTIALS = credentials('dockerid')
-     registry = "prasanthrk/frontend"
+     registry = "prasanthrk/frontend:1.0.0"
         registryCredential = 'dockerid'
         dockerImage = ''
     }
@@ -46,20 +46,20 @@ pipeline{
 
         stage('pushing image to dockerhub') {
             steps {
-                  sh 'sudo docker push prasanthrk/frontend'
+                  sh 'sudo docker push prasanthrk/frontend:1.0.0'
             }
         }
 
         stage('Remove old images') {
              steps {
-                 sh 'sudo docker rmi -f prasanthrk/frontend'
+                 sh 'sudo docker rmi -f prasanthrk/frontend:1.0.0'
             }
         }
 
         stage('app deploy') {
             steps {
                 sh 'sudo docker container rm --force frontend'
-                sh 'sudo docker run -dt --name frontend -p 80:80 prasanthrk/frontend'
+                sh 'sudo docker run -dt --name frontend -p 80:80 prasanthrk/frontend:1.0.0'
          }
       }
    }
