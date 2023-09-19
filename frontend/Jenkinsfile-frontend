@@ -30,16 +30,11 @@ pipeline{
             }
         }
 
-        stage('docker image ') {
+        stage('docker image for nexus ') {
             steps {
-                script {
-                    echo "Releasing.."       
-                    def packageJSON = readJSON file: 'frontend/package.json'
-                    def packageJSONVersion = '1.0.0'
-                    echo "${packageJSONVersion}"  
-                    sh "zip -r frontend/src-1.0.0.zip frontend/src"
-                    sh "curl -v -u admin:rk@098rk --upload-file frontend/src-${packageJSONVersion}.zip http://15.207.247.104:8081/repository/chat-application/"     
-            }
+                sh 'sudo docker login http://15.207.247.104:8081 -u admin -p rk@098rk'
+                sh 'cd frontend && sudo docker tag prasanthrk/frontend:1.0.0 http://15.207.247.104:8081/repository/chat-application/prasanthrk/frontend:1.0.0'
+                sh 'sudo docker push http://15.207.247.104:8081/repository/chat-application/prasanthrk/frontend:1.0.0
             }
         }
 
