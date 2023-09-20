@@ -61,9 +61,9 @@ pipeline{
         stage('Deploy to container') {
             steps {
                 sh 'sudo docker container rm --force chatdb'
+                sh 'sudo docker container rm --force backend'
                 sh 'sudo docker network rm chatnetwork'
                 sh 'sudo docker network create -d bridge chatnetwork'
-                sh 'sudo docker container rm --force backend'
                 sh 'sudo docker run -d --name chatdb -p 5432:5432 --network chatnetwork -e POSTGRES_PASSWORD=password postgres'
                 sh 'sudo docker container run -dt --name backend -p 8080:8080 --network chatnetwork -e DATABASE_URL=postgresql://postgres:password@chatdb:5432/postgres -e PORT=8080 -e NODE_ENV=development -e JWT_SECRET=Odurxn3pec8mwtgwI/QJIt3hsttGpQjC3Tc3wz1K6N4= -e SENDGRID_API_KEY=sendgridapikey -e SENDGRID_FROM_EMAIL=prasanth.rk22@gmail.com prasanthrk/backend'
             }
