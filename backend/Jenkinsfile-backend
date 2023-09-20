@@ -11,7 +11,7 @@ pipeline{
     stages {
         stage('slack notification') {
             steps {
-                slackSend channel: 'chatapp', color: 'ffff00', message: "SlackSend 'backend pipeline has been started ${env.JOB_NAME} ${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)'"
+                slackSend channel: 'chatapplication', color: 'ffff00', message: "SlackSend 'backend pipeline has been started ${env.JOB_NAME} ${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)'"
             }
         }
 
@@ -28,18 +28,17 @@ pipeline{
             }
         }
 
-        stage('Nexus-Release chat') {
+        stage('Release chatapp') {
             steps {
                 script {
-                    echo "Releasing.."       
                     def packageJSON = readJSON file: 'backend/package.json'
                     def packageJSONVersion = packageJSON.version
-                    echo "${packageJSONVersion}"  
-                    sh "zip backend/src-${packageJSONVersion}.zip -r backend/src"
-                    sh "curl -v -u admin:rk@098rk --upload-file backend/src-${packageJSONVersion}.zip http://3.110.180.159:8081/repository/chat-application/"     
-            }
-            }
-        }
+                    echo "${packageJSONVersion}"
+                    sh "zip -r backend/src-${packageJSONVersion}.zip backend/src"
+                    sh "curl -v -u admin:rk@098rk --upload-file frontend/src-1.0.0.zip http://3.111.245.13:8081/repository/chat-application/"
+                     }   
+                 }
+             }
 
         stage('docker-login') {
             steps {
@@ -75,9 +74,9 @@ post {
 success {
     script {
         slackSend(
-            channel: 'chatapp',
+            channel: 'chatapplication',
             color: 'good',
-            message: 'hi..CONGRATULATIONS backend job is success !!! backend build succeeded Thanks...prasanth',
+            message: 'hi..CONGRATULATIONS backend job is success !!! backend build got succeeded Thanks...prasanth',
             tokenCredentialId: 'jenkin-project'
         )
 
@@ -90,9 +89,9 @@ success {
     failure {
         script {
             slackSend(
-                channel: 'chatapp',
+                channel: 'chatapplication',
                 color: 'danger',
-                message: 'backend job failed. Please check the build logs for more details. Thanks...prasanth',
+                message: 'backend job got failed. Please check the build logs for more details. Thanks...prasanth',
                 tokenCredentialId: 'jenkin-project'
 
             )
