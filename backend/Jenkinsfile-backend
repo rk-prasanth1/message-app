@@ -60,9 +60,8 @@ pipeline{
 
         stage('Deploy to container') {
             steps {
-                sh 'sudo docker network disconnect -f chatnetwork chatdb'
-                sh 'sudo docker network rm chatnetwork'
                 sh 'sudo docker container rm --force chatdb'
+                sh 'sudo docker network rm chatnetwork'
                 sh 'sudo docker network create -d bridge chatnetwork'
                 sh 'sudo docker container rm --force backend'
                 sh 'sudo docker run -d --name chatdb -p 5432:5432 --network chatnetwork -e POSTGRES_PASSWORD=password postgres'
