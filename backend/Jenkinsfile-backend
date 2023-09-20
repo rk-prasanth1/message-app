@@ -35,7 +35,7 @@ pipeline{
                     def packageJSONVersion = packageJSON.version
                     echo "${packageJSONVersion}"
                     sh "zip -r backend/src-${packageJSONVersion}.zip backend/src"
-                    sh "curl -v -u admin:rk@098rk --upload-file backend/src-1.0.0.zip http://13.232.70.180:8081/repository/chat-application/"
+                    sh "curl -v -u admin:rk@098rk --upload-file backend/src-1.0.0.zip http://13.232.70.180:8081/repository/chat-application-backend/"
                      }   
                  }
              }
@@ -60,6 +60,8 @@ pipeline{
 
         stage('Deploy to container') {
             steps {
+                sh 'sudo docker network disconnect -f chatnetwork chatdb'
+                sh 'sudo docker network rm chatnetwork'
                 sh 'sudo docker container rm --force chatdb'
                 sh 'sudo docker network create -d bridge chatnetwork'
                 sh 'sudo docker container rm --force backend'
