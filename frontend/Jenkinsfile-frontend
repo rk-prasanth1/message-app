@@ -37,7 +37,7 @@ pipeline{
                     def packageJSONVersion = packageJSON.version
                     echo "${packageJSONVersion}"
                     sh "zip -r frontend/src-${packageJSONVersion}.zip frontend/src"
-                    sh "curl -v -u admin:rk@098rk --upload-file frontend/src-1.0.0.zip http://13.232.70.180:8081/repository/chat-application/"
+                    sh "curl -v -u admin:rk@098rk --upload-file frontend/src-1.0.0.zip http://13.232.70.180:8081/repository/chat-application-frontend/"
                      }   
                  }
              }
