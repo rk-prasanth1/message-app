@@ -5,7 +5,7 @@ pipeline{
 
     environment {
     DOCKERHUB_CREDENTIALS = credentials('dockerid')
-     registry = "prasanthrk/frontend:1.0.0"
+     registry = "prasanthrk/frontend"
         registryCredential = 'dockerid'
         dockerImage = ''
     }
@@ -26,7 +26,7 @@ pipeline{
         stage('build image') {
             steps {
                 sh 'sudo docker rmi -f prasanth/frontend'
-                sh 'cd frontend && sudo docker build -t prasanthrk/frontend:1.0.0 .'
+                sh 'cd frontend && sudo docker build -t prasanthrk/frontend .'
             }
         }
 
