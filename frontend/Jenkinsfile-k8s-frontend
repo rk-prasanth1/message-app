@@ -38,9 +38,9 @@ pipeline{
 
         stage('k8s deployment') {
             steps {
-                sh 'cd frontend && kubectl apply -f frontend-deployment'
-                sh 'cd frontend && kubectl apply -f frontend-load-balancer-service'
-                sh 'kubectl rollout restart deployment frontend-deployment'
+                sh 'cd frontend && kubectl apply -f frontend-deployment.yaml'
+                sh 'cd frontend && kubectl apply -f frontend-load-balancer-service.yaml'
+                sh 'kubectl rollout restart deployment frontend-deployment.yaml'
          }
       }
    }
