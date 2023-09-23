@@ -11,36 +11,12 @@ pipeline{
     }
 
     stages {
-        stage('slack notification') {
-            steps {
-                slackSend channel: 'chatapplication', color: 'ffff00', message: "SlackSend 'Frontend pipeline has been started ${env.JOB_NAME} ${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)'"
-            }
-        }
-
-        stage('sonar analysis') {
-            steps {
-               sh 'cd frontend && sudo docker run --rm -e SONAR_HOST_URL="http://65.1.86.167:9000" -e SONAR_TOKEN=sqp_c06dafa2ea6908a406ceb5f0d00eb2b4cd002969 -v ".:/usr/src" sonarsource/sonar-scanner-cli "-Dsonar.projectKey=chat-application-frontend"'
-             }   
-        }
-
         stage('build image') {
             steps {
                 sh 'sudo docker rmi -f prasanth/frontend'
                 sh 'cd frontend && sudo docker build -t prasanthrk/frontend .'
             }
         }
-
-        stage('Release chatapp') {
-            steps {
-                script {
-                    def packageJSON = readJSON file: 'frontend/package.json'
-                    def packageJSONVersion = packageJSON.version
-                    echo "${packageJSONVersion}"
-                    sh "zip -r frontend/src-${packageJSONVersion}.zip frontend/src"
-                    sh "curl -v -u admin:admin123 --upload-file frontend/src-1.0.0.zip http://13.232.70.180:8081/repository/chat-application-frontend/"
-                     }   
-                 }
-             }
 
         stage('docker-login') {
             steps {
@@ -67,36 +43,4 @@ pipeline{
          }
       }
    }
-post {
-success {
-    script {
-        slackSend(
-            channel: 'chatapplication',
-            color: 'good',
-            message: 'hi..CONGRATULATIONS frontend job is success !!! frontend build got succeeded Thanks...prasanth',
-            tokenCredentialId: 'jenkin-project'
-        )
-
-        emailext body: 'Frontend chat application job got succeed.$PROJECT_NAME - Build # $BUILD_NUMBER - $BUILD_STATUS Check console output at $BUILD_URL to view the results.. Thankyou prasanth',
-            recipientProviders: [developers()],
-            subject: 'Frontend chat app build got successed',
-            to: 'prasanth.rk66@gmail.com'
-    }
-}
-    failure {
-        script {
-            slackSend(
-                channel: 'chatapplication',
-                color: 'danger',
-                message: 'frontend job got failed. Please check the build logs for more details. Thanks...prasanth',
-                tokenCredentialId: 'jenkin-project'
-
-            )
-            emailext body: 'Frontend chat application job got Failed.$PROJECT_NAME - Build # $BUILD_NUMBER - $BUILD_STATUS Check console output at $BUILD_URL to view the results.. Thankyou prasanth',
-            recipientProviders: [developers()],
-            subject: 'Frontend chat app build got failed',
-            to: 'prasanth.rk66@gmail.com'
-        }
-    }
-}
 }
