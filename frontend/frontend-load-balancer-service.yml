@@ -1,0 +1,12 @@
+apiversion: v1
+kind: service
+metadata: 
+  name: frontend-load-balancer-service
+spec:
+  selector:
+    component: frontend
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+  type: LoadBalancer      
