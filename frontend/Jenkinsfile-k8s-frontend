@@ -40,6 +40,7 @@ pipeline{
             steps {
                 sh 'cd frontend && kubectl apply -f frontend-deployment'
                 sh 'cd frontend && kubectl apply -f frontend-load-balancer-service'
+                sh 'kubectl rollout restart deployment frontend-deployment'
          }
       }
    }
