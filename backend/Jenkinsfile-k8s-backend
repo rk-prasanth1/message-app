@@ -40,9 +40,6 @@ pipeline{
                 sh 'cd backend && kubectl apply -f postgres-persistent-volume-claim.yaml'
                 sh 'cd backend && kubectl apply -f postgres-deployment.yaml'
                 sh 'cd backend && kubectl apply -f postgres-cluster-ip.yaml'
-                sh 'cd backend && kubectl apply -f backend-deployment.yaml'
-                sh 'cd backend && kubectl apply -f backend-load-balancer-service.yaml'
-                sh 'kubectl rollout restart deployment backend-deployment'
             }
         }
     }
