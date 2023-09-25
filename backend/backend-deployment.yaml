@@ -2,10 +2,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: backend-deployment
-  labels:
-    component: backend
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       component: backend
@@ -14,7 +12,7 @@ spec:
       labels:
         component: backend
     spec:
-      containers:
+     containers:
         - name: backend
           image: prasanthrk/backend
           imagePullPolicy: Always
@@ -23,8 +21,6 @@ spec:
           env:
             - name: PORT
               value: "8080"
-            - name: DATABASE_URL
-              value: "postgresql://postgres:password@postgres-cluster-ip-service:5432/postgres"  
             - name: DB_HOST
               value: postgres-cluster-ip-service
             - name: DB_PORT
@@ -42,4 +38,4 @@ spec:
             - name: SENDGRID_API_KEY
               value: sendgridapikey
             - name: SENDGRID_FROM_EMAIL
-              value: prasanth.rk22@gmail.com
+              value: prasanth.rk22@gmail.com  
