@@ -6,11 +6,11 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      component: backend
+      app: backend
   template:
     metadata:
       labels:
-        component: backend
+        app: backend
     spec:
      containers:
         - name: backend
@@ -40,4 +40,4 @@ spec:
             - name: SENDGRID_API_KEY
               value: sendgridapikey
             - name: SENDGRID_FROM_EMAIL
-              value: prasanth.rk22@gmail.com  
+              value: prasanth.rk22@gmail.com
