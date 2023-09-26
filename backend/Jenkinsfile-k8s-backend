@@ -36,9 +36,11 @@ pipeline{
 
         stage('Deploy to container') {
             steps {
-                sh 'cd backend && kubectl apply -f postgres-persistent-volume.yaml'
-                sh 'cd backend && kubectl apply -f postgres-persistent-volume-claim.yaml'
-                sh 'cd backend && kubectl apply -f postgres-deployment.yaml'
+                sh 'cd backend && kubectl apply -f postgres-pv.yml'
+                sh 'cd backend && kubectl apply -f postgres-pvc.yaml'
+                sh 'cd backend && kubectl apply -f postgres-deployment.yml'
+                sh 'cd backend && kubectl apply -f postgres-cluster.yml'
+
             }
         }
     }
