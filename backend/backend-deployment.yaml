@@ -17,7 +17,7 @@ spec:
           image: prasanthrk/backend
           env:
             - name: DATABASE_URL
-              value: "postgres://postgres:password@postgres-service:5432/database"
+              value: "postgres://postgres:password@postgres-service:5432/postgres"
           imagePullPolicy: Always
           ports:
             - containerPort: 8080
