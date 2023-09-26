@@ -11,4 +11,4 @@ spec:
   resources:
     requests:
       storage: 1Gi
-  volumeName: postgres-pv
+  volumeName: postgres-pv-volume
