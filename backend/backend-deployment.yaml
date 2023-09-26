@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      component: backend
+  template:
+    metadata:
+      labels:
+        component: backend
+    spec:
+     containers:
+        - name: backend
+          image: prasanthrk/backend
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+          env:
+            - name: PORT
+              value: "8080"
+            - name: POSTGRES_HOST
+              value: postgres-cluster-ip-service
+            - name: POSTGRES_PORT
+              value: "5432"
+            - name: POSTGRES_USER
+              value: postgres
+            - name: POSTGRES_DB
+              value: postgres
+            - name: POSTGRES_PASSWORD
+              value: password
+            - name: NODE_ENV
+              value: development
+            - name: JWT_SECRET
+              value: Odurxn3pec8mwtgwI/QJIt3hsttGpQjC3Tc3wz1K6N4=
+            - name: SENDGRID_API_KEY
+              value: sendgridapikey
+            - name: SENDGRID_FROM_EMAIL
+              value: prasanth.rk22@gmail.com  
