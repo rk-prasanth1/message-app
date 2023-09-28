@@ -14,5 +14,5 @@ COPY --from=build /app/node_modules /app/node_modules
 COPY package.json package-lock.json /app/
 COPY src/openapi.yaml /app/src
 COPY prisma /app/
-EXPOSE 8080
+EXPOSE 8081
 CMD [ "npm", "start" ]
