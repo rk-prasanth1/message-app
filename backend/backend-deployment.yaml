@@ -14,7 +14,7 @@ spec:
     spec:
      containers:
         - name: backend
-          image: prasanthrk/backend-k8s
+          image: prasanthrk/backend
           imagePullPolicy: Always
           ports:
             - containerPort: 8080
